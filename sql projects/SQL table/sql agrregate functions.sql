@@ -1,39 +1,76 @@
-CREATE TABLE IF NOT EXISTS zoo_animal (
-    animal_id   INTEGER PRIMARY KEY,
-    name        TEXT    NOT NULL,
-    species     TEXT    NOT NULL,
-    age_years   INTEGER NOT NULL,
-    weight_kg   REAL    NOT NULL
+-- ============================================================
+-- SQL Aggregate Functions
+-- Activity: Marine Life Observation Explorer
+-- ============================================================
+
+-- ---- PART 1: Build and Explore the Table ----
+
+CREATE TABLE IF NOT EXISTS marine_observation (
+    observation_id       INTEGER PRIMARY KEY,
+    animal_name          TEXT    NOT NULL,
+    animal_group         TEXT    NOT NULL,
+    habitat              TEXT    NOT NULL,
+    depth_m              INTEGER NOT NULL,
+    estimated_weight_kg  REAL    NOT NULL
 );
 
-INSERT INTO zoo_animal VALUES (1, 'Lion','big cat', 5, 190.00);
-INSERT INTO zoo_animal VALUES (2, 'tiger','big cat', 3, 190.00);
-INSERT INTO zoo_animal VALUES (3, 'elephant','pachydern',12, 190);
-INSERT INTO zoo_animal VALUES (4, 'giraffe','big cat', 7, 190.00);
-INSERT INTO zoo_animal VALUES (5, 'penguin','bird', 2, 190.00);
-INSERT INTO zoo_animal VALUES (6, 'panda','bear', 6, 190.00);
-INSERT INTO zoo_animal VALUES (7, 'cheetah','big cat', 4, 190.00);
-INSERT INTO zoo_animal VALUES (8, 'rhino','pachydern', 9, 190.00);
+INSERT INTO marine_observation VALUES
+(1, 'Blue Whale',        'Mammal',     'Open Ocean', 30, 120000.0);
+INSERT INTO marine_observation VALUES
+(2, 'Bottlenose Dolphin','Mammal',     'Open Ocean', 15,    250.0);
+INSERT INTO marine_observation VALUES
+(3, 'Green Sea Turtle',  'Reptile',    'Coral Reef', 10,    160.0);
+INSERT INTO marine_observation VALUES
+(4, 'Clownfish',         'Fish',       'Coral Reef',  5,      0.3);
+INSERT INTO marine_observation VALUES
+(5, 'Hammerhead Shark',  'Fish',       'Open Ocean', 70,    230.0);
+INSERT INTO marine_observation VALUES
+(6, 'Giant Octopus',     'Mollusc',    'Seabed',     40,     25.0);
+INSERT INTO marine_observation VALUES
+(7, 'Manta Ray',         'Fish',       'Open Ocean', 25,   1350.0);
+INSERT INTO marine_observation VALUES
+(8, 'Starfish',          'Echinoderm', 'Seabed',     20,      0.5);
 
-SELECT * FROM zoo_animal;
+SELECT * FROM marine_observation;
 
-SELECT species FROM zoo_animal;
+-- ---- PART 2: SELECT DISTINCT ----
 
-SELECT DISTINCT species FROM zoo_animal;
+-- All animal groups, including duplicates
+SELECT animal_group FROM marine_observation;
 
-SELECT COUNT(DISTINCT species) AS unique_species FROM zoo_animal;
+-- Only unique animal groups
+SELECT DISTINCT animal_group FROM marine_observation;
 
-SELECT COUNT(animal_id) AS total_animals FROM zoo_animal;
+-- Count the unique animal groups
+SELECT COUNT(DISTINCT animal_group) AS unique_animal_groups
+FROM marine_observation;
 
-SELECT COUNT(animal_id) AS older_than_5 FROM zoo_animal WHERE age_years > 5;
+-- ---- PART 3: COUNT ----
 
-SELECT SUM(weight_kg) AS total_weight_kg FROM zoo_animal;
+-- Total number of marine observations
+SELECT COUNT(observation_id) AS total_observations
+FROM marine_observation;
 
-SELECT AVG(age_years) AS avg_age_years FROM zoo_animal;
+-- Count observations made in the Open Ocean
+SELECT COUNT(observation_id) AS open_ocean_observations
+FROM marine_observation
+WHERE habitat = 'Open Ocean';
+
+-- ---- PART 4: SUM and AVG ----
+
+-- Total estimated weight of all observed animals
+SELECT SUM(estimated_weight_kg) AS total_estimated_weight_kg
+FROM marine_observation;
+
+-- Average depth of all observations
+SELECT AVG(depth_m) AS average_observation_depth_m
+FROM marine_observation;
+
+-- ---- PART 5: Combining Aggregate Functions ----
 
 SELECT
-    COUNT(animal_id)        AS total_animals,
-    COUNT(DISTINCT species) AS unique_species,
-    SUM(weight_kg)          AS total_weight_kg,
-    AVG(age_years)          AS avg_age_years
-FROM zoo_animal;
+    COUNT(observation_id)        AS total_observations,
+    COUNT(DISTINCT animal_group) AS unique_animal_groups,
+    SUM(estimated_weight_kg)     AS total_estimated_weight_kg,
+    AVG(depth_m)                 AS average_observation_depth_m
+FROM marine_observation;
